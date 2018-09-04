@@ -34,6 +34,14 @@
   </properties>
 
   <dependencies>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.8</version>
+    </dependency>
+    
     <dependency>
       <groupId>com.sparkjava</groupId>
       <artifactId>spark-template-mustache</artifactId>
@@ -57,57 +65,7 @@
     </dependency>
     <dependency>
       <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-openid</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-saml</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-cas</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
       <artifactId>pac4j-http</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-oidc</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-jwt</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-sql</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-ldap</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-mongo</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-kerberos</artifactId>
-      <version>${pac4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.pac4j</groupId>
-      <artifactId>pac4j-couch</artifactId>
       <version>${pac4j.version}</version>
     </dependency>
     <dependency>
