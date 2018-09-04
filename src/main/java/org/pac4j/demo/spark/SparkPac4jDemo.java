@@ -13,8 +13,6 @@ import org.pac4j.core.profile.CommonProfile;
 import org.pac4j.core.profile.ProfileManager;
 import org.pac4j.http.client.indirect.FormClient;
 
-import org.pac4j.jwt.config.signature.SecretSignatureConfiguration;
-import org.pac4j.jwt.profile.JwtGenerator;
 import org.pac4j.saml.client.SAML2Client;
 import org.pac4j.sparkjava.CallbackRoute;
 import org.pac4j.sparkjava.LogoutRoute;
@@ -37,7 +35,7 @@ import static spark.Spark.exception;
 
 public class SparkPac4jDemo {
 
-    private final static String JWT_SALT = "12345678901234567890123456789012";
+    private final static String SALT = "12345678901234567890123456789012";
 
     private final static Logger logger = LoggerFactory.getLogger(SparkPac4jDemo.class);
 
@@ -65,7 +63,7 @@ public class SparkPac4jDemo {
 	    
 	Spark.port(getHerokuAssignedPort());
 	final Config config =
-	    new DemoConfigFactory(JWT_SALT, templateEngine).build();
+	    new DemoConfigFactory(SALT, templateEngine).build();
 	    
 	Spark.get("/", SparkPac4jDemo::index, templateEngine);
 	final CallbackRoute callback = new CallbackRoute(config, null, true);
@@ -91,8 +89,7 @@ public class SparkPac4jDemo {
 	Spark.before("/oidc", new SecurityFilter(config, "OidcClient"));
 	Spark.before("/protected", new SecurityFilter(config, null));
 	Spark.before("/dba", new SecurityFilter(config, "DirectBasicAuthClient,ParameterClient"));
-	Spark.before("/rest-jwt",
-		     new SecurityFilter(config, "ParameterClient"));
+
 	Spark.get("/facebook", SparkPac4jDemo::protectedIndex, templateEngine);
         Spark.get("/facebook/notprotected", SparkPac4jDemo::protectedIndex, templateEngine);
 	Spark.get("/facebookadmin", SparkPac4jDemo::protectedIndex, templateEngine);
@@ -107,11 +104,11 @@ public class SparkPac4jDemo {
 		samlclient.init(new SparkWebContext(rq, rs));
 		return samlclient.getServiceProviderMetadataResolver().getMetadata();
 	    });
-	Spark.get("/jwt", SparkPac4jDemo::jwt, templateEngine);
+
 	Spark.get("/oidc", SparkPac4jDemo::protectedIndex, templateEngine);
 	Spark.get("/protected", SparkPac4jDemo::protectedIndex, templateEngine);
 	Spark.get("/dba", SparkPac4jDemo::protectedIndex, templateEngine);
-	Spark.get("/rest-jwt", SparkPac4jDemo::protectedIndex, templateEngine);
+
 	Spark.get("/loginForm", (rq, rs) -> form(config), templateEngine);
 	final LogoutRoute localLogout =
 	    new LogoutRoute(config, "/?defaulturlafterlogout");
@@ -145,26 +142,13 @@ public class SparkPac4jDemo {
     }
 
     private static ModelAndView index(final Request request, final Response response) {
-	final Map map = new HashMap();
+	final Map<String,Object> map = new HashMap<String,Object>();
 	map.put("profiles", getProfiles(request, response));
 	final SparkWebContext ctx = new SparkWebContext(request, response);
 	map.put("sessionId", ctx.getSessionIdentifier());
 	return new ModelAndView(map, "index.mustache");
     }
 
-    private static ModelAndView jwt(final Request request, final Response response) {
-	final SparkWebContext context = new SparkWebContext(request, response);
-	final ProfileManager manager = new ProfileManager(context);
-	final Optional<CommonProfile> profile = manager.get(true);
-	String token = "";
-	if (profile.isPresent()) {
-	    JwtGenerator generator = new JwtGenerator(new SecretSignatureConfiguration(JWT_SALT));
-	    token = generator.generate(profile.get());
-	}
-	final Map map = new HashMap();
-	map.put("token", token);
-	return new ModelAndView(map, "jwt.mustache");
-    }
 
     private static ModelAndView form(final Config config) {
 	final Map map = new HashMap();

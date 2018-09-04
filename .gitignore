@@ -1,3 +1,18 @@
+# vim stuff
+
+*.swp
+
+# emacs stuff
+
+*~
+\#*\#
+
+# Mac Stuff
+
+.DS_Store
+
+# Maven and java stuff
+
 .classpath
 .project
 .settings/
