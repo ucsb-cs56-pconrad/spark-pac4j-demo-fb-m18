@@ -1,3 +1,9 @@
+# spark-pac4j-demo-fb-m18
+
+This demo started with a copy of <https://github.com/pac4j/spark-pac4j-demo> and then tried to strip it down to only what is needed for Facebook.
+
+# Below this, README contents from original repo
+
 <p align="center">
   <img src="https://pac4j.github.io/pac4j/img/logo-spark.png" width="300" />
 </p>
