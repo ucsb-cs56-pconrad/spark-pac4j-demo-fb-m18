@@ -30,6 +30,7 @@
     <sparkPac4j.version>2.3.0</sparkPac4j.version>
     <pac4j.version>2.2.1</pac4j.version>
     <userDefinedMainClass>org.pac4j.demo.spark.SparkPac4jDemo</userDefinedMainClass>
+    <userDefinedHerokuAppName>spark-pac4j-demo-fb-m18</userDefinedHerokuAppName>
   </properties>
 
   <dependencies>
@@ -152,7 +153,7 @@
 	  <jdkVersion>1.8</jdkVersion>
 	  <!-- Use your own application name -->
 	  <!-- at Heroku CLI, use heroku apps to list, or use Heroku Dashboard -->
-	  <appName>ucsb-cs56-pconrad-08-28-18</appName>
+	  <appName>${userDefinedHerokuAppName}</appName>
 	  <processTypes>
 	    <!-- Tell Heroku how to launch your application -->
 	    <!-- You might have to remove the ./ in front   -->

@@ -59,13 +59,56 @@ public class SparkPac4jDemo {
 	}
 	return 8080; //return default port if heroku-port isn't set (i.e. on localhost)
     }
-    
-    public static void main(String[] args) {
 
-	    
-	Spark.port(getHerokuAssignedPort());
+    /**
+
+       return a HashMap with values of all the environment variables
+       listed; print error message for each missing one, and exit if any
+       of them is not defined.
+    */
+    
+    public static HashMap<String,String>
+	getNeededEnvVars(String [] neededEnvVars) {
+	HashMap<String,String> envVars = new HashMap<String,String>();
+	
+	
+	for (String k:neededEnvVars) {
+	    String v = System.getenv(k);
+	    envVars.put(k,v);
+	}
+	
+	boolean error=false;
+	for (String k:neededEnvVars) {
+	    if (envVars.get(k)==null) {
+		error = true;
+		System.err.println("Error: Must define env variable " + k);
+	    }
+	}
+	if (error) { System.exit(1); }
+	
+	return envVars;
+    }
+
+    public static void main(String[] args) {
+	
+	HashMap<String,String> envVars =
+	    getNeededEnvVars(new String []{ "FACEBOOK_APP_ID",
+					    "FACEBOOK_APP_SECRET",
+					    "FACEBOOK_OAUTH_REDIRECT_URI",
+					    "SALT",
+					    "LOCALHOST_HTTPS"});
+
+	Spark.port(getHerokuAssignedPort());	
+	String keyStoreLocation = "keystore.jks";
+	String keyStorePassword = "password";
+	if (envVars.get("LOCALHOST_HTTPS").equals("true")) {
+	    Spark.secure(keyStoreLocation, keyStorePassword, null, null);
+	    System.out.println("Using https:");	    
+	}
+	
+
 	final DemoConfig<Object,SparkWebContext> config =
-	    new DemoConfigFactory(SALT, templateEngine).build();
+	    new DemoConfigFactory(SALT, templateEngine, envVars).build();
 	    
 	Spark.get("/", SparkPac4jDemo::index, templateEngine);
 

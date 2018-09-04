@@ -10,6 +10,7 @@ import org.pac4j.oauth.client.FacebookClient;
 import org.pac4j.sparkjava.SparkWebContext;
 
 import spark.TemplateEngine;
+import java.util.HashMap;
 
 public class DemoConfigFactory  {
 
@@ -17,24 +18,29 @@ public class DemoConfigFactory  {
 
     private final TemplateEngine templateEngine;
 
+    private final HashMap<String,String> envVars;
+    
     public DemoConfigFactory(final String salt,
-			     final TemplateEngine templateEngine) {
+			     final TemplateEngine templateEngine,
+			     final HashMap<String,String> envVars) {
         this.salt = salt;
         this.templateEngine = templateEngine;
+	this.envVars = envVars;
     }
 
     public DemoConfig<Object,SparkWebContext> build(final Object... parameters) {
 
         final FacebookClient facebookClient =
-	    new FacebookClient("145278422258960",
-			       "be21409ba8f39b5dae2a7de525484da8");
+	    new FacebookClient(envVars.get("FACEBOOK_APP_ID"),
+			       envVars.get("FACEBOOK_APP_SECRET"));
 	
-        final Clients clients = new Clients("http://localhost:8080/callback",
-					    facebookClient);
+	final Clients clients =
+	    new Clients(envVars.get("FACEBOOK_OAUTH_REDIRECT_URI"),
+			facebookClient);
 	
         final DemoConfig<Object,SparkWebContext> config =
 	    new DemoConfig<Object,SparkWebContext>(clients);
-
+	
         config.addAuthorizer("admin",
 			     new RequireAnyRoleAuthorizer("ROLE_ADMIN"));
         config.addAuthorizer("custom",
