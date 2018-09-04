@@ -11,15 +11,18 @@ import java.util.List;
 public class CustomAuthorizer extends ProfileAuthorizer<CommonProfile> {
 
     @Override
-    public boolean isAuthorized(final WebContext context, final List<CommonProfile> profiles) throws HttpAction {
+    public boolean isAuthorized(final WebContext context,
+				final List<CommonProfile> profiles)
+	throws HttpAction {
         return isAnyAuthorized(context, profiles);
     }
-
+    
     @Override
-    public boolean isProfileAuthorized(final WebContext context, final CommonProfile profile) {
+    public boolean isProfileAuthorized(final WebContext context,
+				       final CommonProfile profile) {
         if (profile == null) {
             return false;
         }
-        return StringUtils.startsWith(profile.getUsername(), "jle");
+        return profile.getUsername().equals("pconrad");
     }
 }
